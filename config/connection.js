@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize("sqlite:rasekhon.db");
+const sequelize = new Sequelize("sqlite:users.db");
 
 module.exports = sequelize;
