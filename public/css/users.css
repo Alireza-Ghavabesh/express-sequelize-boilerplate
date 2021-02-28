@@ -1,0 +1,42 @@
+@font-face {
+    font-family: 'weblogmayekan';
+    src: url('fonts/Weblogma_Yekan.eot');
+    src: url('fonts/Weblogma_Yekan.eot#iefix') format('embedded-opentype'),
+         url('fonts/Weblogma_Yekan.woff') format('woff'),
+         url('fonts/Weblogma_Yekan.ttf') format('truetype'),
+         url('fonts/Weblogma_Yekan.svg#CartoGothicStdBook') format('svg');
+    font-weight: normal;
+    font-style: normal;
+} 
+
+html,body{
+    /* direction: rtl; */
+    
+}
+
+ul, li{
+    font-family: weblogmayekan;
+    direction: rtl;
+}
+
+div#div-search{
+    direction: rtl;
+    font-family: weblogmayekan;
+}
+
+input#input-search{
+    margin-top: 10px;
+    direction: rtl;
+    font-family: weblogmayekan;
+}
+
+#btn-search{
+    margin-top: 10px;
+}
+
+img{
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+
+}

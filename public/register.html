@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>راسخون</title>
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="css/persianDatepicker-default.css"
+    />
+  </head>
+  <body>
+    <div class="form-style-10">
+      <h1>ثبت نام راسخون</h1>
+      <form>
+        <div class="inner-wrap">
+          <label>نام <input type="text" id="nam" /></label>
+          <label>نام خانوادگی <input type="text" id="nam_khanevadegi" /></label>
+          <label>کد جهادگر <input type="number" id="code_jahadgar" /></label>
+          <label>تاریخ تولد <input type="text" id="tarikh_tavalod" /></label>
+          <label>کد ملی <input type="number" id="code_meli" /></label>
+          <label>موبایل<input type="text" id="mobile" /></label>
+
+          <label
+            >علاقمندی
+            <select id="alaghemandi"></select>
+          </label>
+          <label
+            >کمیته
+            <select id="komite"></select>
+          </label>
+        </div>
+        <div>
+          <label for="aks" id="profile" class="btn">آپلود تصویر پروفایل</label>
+          <input id="aks" name="aks" style="visibility: hidden" type="file" />
+        </div>
+
+        <div class="button-section">
+          <input
+            type="button"
+            name="register"
+            value="ثبت"
+            onclick="sabt();"
+            id="reg"
+          />
+        </div>
+      </form>
+    </div>
+
+    <!-- js files -->
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/notify.min.js"></script>
+    <script src="js/persianDatepicker.min.js"></script>
+    <script>
+      // daryaft list komite
+      axios.get("http://localhost:8000/api/komites").then((komites) => {
+        for (let komite of komites.data) {
+          let selectTag = document.getElementById("komite");
+
+          selectTag.innerHTML +=
+            '<option  value="' + komite.text + '">' + komite.text + "</option>";
+        }
+      });
+
+      // daryaft list alaghe mandi
+      axios
+        .get("http://localhost:8000/api/alaghemandis")
+        .then((alaghemandis) => {
+          for (let alaghemandi of alaghemandis.data) {
+            let selectTag = document.getElementById("alaghemandi");
+
+            selectTag.innerHTML +=
+              '<option  value="' +
+              alaghemandi.text +
+              '">' +
+              alaghemandi.text +
+              "</option>";
+          }
+        });
+
+      // taghvim
+      $(function () {
+        $("#tarikh_tavalod").persianDatepicker({
+          months: [
+            "فروردین",
+            "اردیبهشت",
+            "خرداد",
+            "تیر",
+            "مرداد",
+            "شهریور",
+            "مهر",
+            "آبان",
+            "آذر",
+            "دی",
+            "بهمن",
+            "اسفند",
+          ],
+          dowTitle: [
+            "شنبه",
+            "یکشنبه",
+            "دوشنبه",
+            "سه شنبه",
+            "چهارشنبه",
+            "پنج شنبه",
+            "جمعه",
+          ],
+          shortDowTitle: ["ش", "ی", "د", "س", "چ", "پ", "ج"],
+          showGregorianDate: !1,
+          persianNumbers: !0,
+          formatDate: "YYYY/MM/DD",
+          selectedBefore: !1,
+          selectedDate: null,
+          startDate: null,
+          endDate: null,
+          prevArrow: "\u25c4",
+          nextArrow: "\u25ba",
+          theme: "default",
+          alwaysShow: !1,
+          selectableYears: null,
+          selectableMonths: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          cellWidth: 25, // by px
+          cellHeight: 20, // by px
+          fontSize: 13, // by px
+          isRTL: !1,
+          calendarPosition: {
+            x: 0,
+            y: 0,
+          },
+          onShow: function () {},
+          onHide: function () {},
+          onSelect: function () {},
+          onRender: function () {},
+        });
+      });
+      // sabtnam
+      function sabt() {
+        let fields_is_ok = false;
+        let nam = document.getElementById("nam").value;
+
+        if (nam === "") {
+          $("#nam").notify("لطفا نام خود را وارد کنید", {
+            position: "right",
+            // className: "success",
+          });
+          let fields_is_ok = false;
+        } else {
+          fields_is_ok = true;
+        }
+        let nam_khanevadegi = document.getElementById("nam_khanevadegi").value;
+        if (nam_khanevadegi === "") {
+          $("#nam_khanevadegi").notify("لطفا نام خانوادگی خود را وارد کنید", {
+            position: "right",
+            // className: "success",
+          });
+          fields_is_ok = false;
+        } else {
+          fields_is_ok = true;
+        }
+
+        let mobile = document.getElementById("mobile").value;
+        if (mobile === "") {
+          $("#mobile").notify("لطفا شماره همراه خود را وارد کنید", {
+            position: "right",
+            // className: "success",
+          });
+          fields_is_ok = false;
+        } else {
+          fields_is_ok = true;
+        }
+
+        let code_jahadgar = document.getElementById("code_jahadgar").value;
+        if (code_jahadgar === "") {
+          $("#code_jahadgar").notify("لطفا کد جهادگر را وارد کنید", {
+            position: "right",
+            // className: "success",
+          });
+          fields_is_ok = false;
+        } else {
+          fields_is_ok = true;
+        }
+        let tarikh_tavalod = document.getElementById("tarikh_tavalod").value;
+        let tarikh_tavalod_splited = tarikh_tavalod.split("/");
+        tarikh_tavalod = `${tarikh_tavalod_splited[0]}-${tarikh_tavalod_splited[1]}-${tarikh_tavalod_splited[2]}`;
+        if (tarikh_tavalod === "") {
+          $("#tarikh_tavalod").notify("لطفا تاریخ تولد را وارد کنید", {
+            position: "right",
+            // className: "success",
+          });
+          fields_is_ok = false;
+        } else {
+          fields_is_ok = true;
+        }
+        let code_meli = document.getElementById("code_meli").value;
+        if (code_meli === "") {
+          $("#code_meli").notify("لطفا کد ملی را وارد کنید", {
+            position: "right",
+            // className: "success",
+          });
+          fields_is_ok = false;
+        } else {
+          fields_is_ok = true;
+        }
+        let alaghemandi = document.getElementById("alaghemandi").value;
+
+        // if (alaghemandi === "") {
+        //   $("#alaghemandi").notify("لطفا نوع علاقمندی را وارد کنید", {
+        //     position: "right",
+        //     // className: "success",
+        //   });
+        //   fields_is_ok = false;
+        // } else {
+        //   fields_is_ok = true;
+        // }
+        let komite = document.getElementById("komite").value;
+
+        // if (alaghemandi === "") {
+        //   $("#komite").notify("لطفا کمیته را انتخاب کنید", {
+        //     position: "right",
+        //     // className: "success",
+        //   });
+        //   fields_is_ok = false;
+        // } else {
+        //   fields_is_ok = true;
+        // }
+
+        let imagefile = document.querySelector("#aks");
+        if (!imagefile) {
+          $("#aks").notify("لطفا عکس خود را آپلود کنید", {
+            position: "right",
+            // className: "success",
+          });
+          fields_is_ok = false;
+        } else {
+          fields_is_ok = true;
+        }
+        if (fields_is_ok === true) {
+          let data = imagefile.files[0];
+
+          console.log(`formData.append("nam", nam); =====> ${nam}`);
+          console.log(
+            `formData.append("nam_khanevadegi", nam_khanevadegi); =====> ${nam_khanevadegi}`
+          );
+
+          // let formData = new FormData();
+          // formData.append("nam", nam);
+          // formData.append("nam_khanevadegi", nam_khanevadegi);
+          // formData.append("code_jahadgar", code_jahadgar);
+          // formData.append("tarikh_tavalod", tarikh_tavalod);
+          // formData.append("code_meli", code_meli);
+          // formData.append("alaghemandi", alaghemandi);
+          // formData.append("komite", komite);
+          // formData.append("aks", data.name);
+          // formData.append("mobile", mobile);
+          axios({
+            method: "post",
+            url: "http://localhost:8000/api/addUser",
+            data: {
+              nam: nam,
+              nam_khanevadegi: nam_khanevadegi,
+              code_jahadgar: code_jahadgar,
+              tarikh_tavalod: tarikh_tavalod,
+              code_meli: code_meli,
+              alaghemandi: alaghemandi,
+              komite: komite,
+              aks: data.name,
+              mobile: mobile,
+            },
+          }).then((res) => {
+            let formData_aks = new FormData();
+            let aks = document.querySelector("#aks");
+            data = aks.files[0];
+            formData_aks.append("aks", data);
+            console.log(data);
+            axios
+              .post("http://localhost:8000/api/upload", formData_aks, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then((result) => {
+                console.log(result);
+              });
+
+            let nam = (document.getElementById("nam").value = null);
+            let nam_khanevadegi = (document.getElementById(
+              "nam_khanevadegi"
+            ).value = null);
+            let code_jahadgar = (document.getElementById(
+              "code_jahadgar"
+            ).value = null);
+            let tarikh_tavalod = (document.getElementById(
+              "tarikh_tavalod"
+            ).value = null);
+            let code_meli = (document.getElementById("code_meli").value = null);
+            let alaghemandi = (document.getElementById(
+              "alaghemandi"
+            ).value = null);
+            let komite = (document.getElementById("komite").value = null);
+            $("#reg").notify("ثبت نام انجام شد", {
+              position: "right",
+              className: "success",
+            });
+            let ready = new Audio("audios/ready.mp3").play();
+          });
+        } else {
+          $("#reg").notify("لطفا اطلاعات خود را کامل کنید", {
+            position: "right",
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
