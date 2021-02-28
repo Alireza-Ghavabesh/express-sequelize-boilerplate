@@ -14,7 +14,7 @@ router.post("/AddUser", async (request, response) => {
   });
 });
 
-router.get(`/users`, async (request, response) => {
+router.get(`/Users`, async (request, response) => {
   await User.findAll().then((Users) => {
     response.set("Content-Type", "application/json");
     response.json(Users);
