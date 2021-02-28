@@ -38,6 +38,13 @@ router.get(`/user/:id`, async (req, res) => {
   });
 });
 
+router.get(`/user/:id`, async (req, res) => {
+  let id = req.params.id;
+  await User.findByPk(id).then((user) => {
+    res.json(user);
+  });
+});
+
 router.get(`/user/user_id=:user_id`, async (request, response) => {
   let user_id = request.params.user_id;
   await User.findAll({
